@@ -1,11 +1,11 @@
-export default async function updateRacerAPI(name: string, color: string, id: number) {
-    const url = new URL(`http://127.0.0.1:3000/garage/${id}`);
+export default async function updateWinnerAPI(id: number, wins: number, time: number) {
+    const url = new URL(`http://127.0.0.1:3000/winners/${id}`);
     const options = {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, color }),
+        body: JSON.stringify({ wins, time }),
     };
 
     return fetch(url.toString(), options)

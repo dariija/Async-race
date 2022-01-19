@@ -1,11 +1,11 @@
-export default async function updateRacerAPI(name: string, color: string, id: number) {
-    const url = new URL(`http://127.0.0.1:3000/garage/${id}`);
+export default async function createWinnerAPI(id: number, wins: number, time: number) {
+    const url = new URL('http://127.0.0.1:3000/winners');
     const options = {
-        method: 'PUT',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, color }),
+        body: JSON.stringify({ id, wins, time }),
     };
 
     return fetch(url.toString(), options)
@@ -13,5 +13,5 @@ export default async function updateRacerAPI(name: string, color: string, id: nu
             if (res.ok) return res.json();
             throw new Error(res.statusText);
         })
-        .catch((err) => err);
+        .catch((e) => e);
 }

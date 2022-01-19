@@ -1,8 +1,9 @@
 import TRacerDataStatus from './TRacerDataStatus';
+import TRacerResponse from './TRacerResponse';
 
 type TRacerDataControl = {
     racerDataStatus: TRacerDataStatus;
-    startRacer: () => Promise<number>;
+    startRacer: () => TRacerResponse;
     stopRacer: () => Promise<void>;
 };
 
