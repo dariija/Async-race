@@ -4,5 +4,12 @@ export default async function deleteRacerAPI(id: number) {
         method: 'DELETE',
     };
 
-    await fetch(url.toString(), options);
+    return fetch(url.toString(), options)
+        .then((res) => {
+            if (res.ok) return res.json();
+            throw new Error(res.statusText);
+        })
+        .catch((err) => {
+            return err;
+        });
 }

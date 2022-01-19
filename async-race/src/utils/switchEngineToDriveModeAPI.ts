@@ -13,7 +13,6 @@ export default async function switchEngineToDriveModeAPI(id: number) {
         })
         .then((res) => res)
         .catch((err) => {
-            console.log(err);
             return err;
         });
 }

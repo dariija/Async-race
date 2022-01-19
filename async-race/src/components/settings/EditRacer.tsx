@@ -33,10 +33,16 @@ export default function EditRacer({ selectedRacerData }: Props) {
 
     const editRacer = async () => {
         if (selectedRacerData.selectedRacer) {
-            await updateRacerAPI(editedRacerName, editedRacerColour, selectedRacerData.selectedRacer.idData.id);
-            selectedRacerData.selectedRacer.nameData.setName(editedRacerName);
-            selectedRacerData.selectedRacer.colourData.setColour(editedRacerColour);
-            selectedRacerData.setSelectedRacer(null);
+            const updated = await updateRacerAPI(
+                editedRacerName,
+                editedRacerColour,
+                selectedRacerData.selectedRacer.idData.id
+            );
+            if (!(updated instanceof Error)) {
+                selectedRacerData.selectedRacer.nameData.setName(editedRacerName);
+                selectedRacerData.selectedRacer.colourData.setColour(editedRacerColour);
+                selectedRacerData.setSelectedRacer(null);
+            }
         }
     };
 

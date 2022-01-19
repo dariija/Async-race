@@ -6,5 +6,12 @@ export default async function startEngineAPI(id: number) {
     };
     url.search = params.toString();
 
-    return (await fetch(url.toString(), options)).json();
+    return fetch(url.toString(), options)
+        .then((res) => {
+            if (res.ok) return res.json();
+            throw new Error(res.statusText);
+        })
+        .catch((err) => {
+            return err;
+        });
 }

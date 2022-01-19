@@ -7,6 +7,8 @@ import stopEngineAPI from '../../../utils/stopEngineAPI';
 import switchEngineToDriveModeAPI from '../../../utils/switchEngineToDriveModeAPI';
 import deleteRacerAPI from '../../../utils/deleteRacerAPI';
 import { TRacersControl } from '../../../types/TRacerDataControl';
+import getWinnerAPI from '../../../utils/getWinnerAPI';
+import deleteWinnerAPI from '../../../utils/deleteWinnerAPI';
 
 type Props = {
     racersData: {
@@ -49,22 +51,29 @@ export default function RacerControls({
 }: Props) {
     const startRacer = async () => {
         const start = await startEngineAPI(racerDataStatus.idData.id);
-        racerEngineStopStatus.setIsEngineStopped(false);
-        racerEngineStartStatus.setIsEngineStarted(true);
+        if (!(start instanceof Error)) {
+            racerEngineStopStatus.setIsEngineStopped(false);
+            racerEngineStartStatus.setIsEngineStarted(true);
 
-        const time = start.distance / start.velocity / 1000;
-        racerAnimationStatus.setRacerTimeAnimation(time);
-
-        const drive = await switchEngineToDriveModeAPI(racerDataStatus.idData.id);
-        if (drive instanceof Error) racerEngineStopStatus.setIsEngineStopped(true);
-        return time;
+            const time = start.distance / start.velocity / 1000;
+            racerAnimationStatus.setRacerTimeAnimation(time);
+            const drive = await switchEngineToDriveModeAPI(racerDataStatus.idData.id);
+            if (drive instanceof Error) {
+                racerEngineStopStatus.setIsEngineStopped(true);
+                return new Error();
+            }
+            return { name: racerDataStatus.nameData.name, id: racerDataStatus.idData.id, time };
+        }
+        return new Error();
     };
 
     const stopRacer = async () => {
         racerEngineStopStatus.setIsEngineStopped(true);
-        await stopEngineAPI(racerDataStatus.idData.id);
-        racerEngineStartStatus.setIsEngineStarted(false);
-        racerAnimationStatus.setRacerTimeAnimation(0);
+        const stopped = await stopEngineAPI(racerDataStatus.idData.id);
+        if (!(stopped instanceof Error)) {
+            racerEngineStartStatus.setIsEngineStarted(false);
+            racerAnimationStatus.setRacerTimeAnimation(0);
+        }
     };
 
     const selectRacer = () => {
@@ -72,10 +81,16 @@ export default function RacerControls({
     };
 
     const deleteRacer = async () => {
-        await deleteRacerAPI(racerDataStatus.idData.id);
-        const newData = racersData.racers.filter((racer) => racer.id !== racerDataStatus.idData.id);
-        racersData.setRacers(newData);
-        racersOnPageData.setRacersOnPage(newData);
+        const deletedRacer = await deleteRacerAPI(racerDataStatus.idData.id);
+        if (!(deletedRacer instanceof Error)) {
+            const newData = racersData.racers.filter((racer) => racer.id !== racerDataStatus.idData.id);
+            racersData.setRacers(newData);
+            racersOnPageData.setRacersOnPage(newData);
+        }
+        const findWinner = await getWinnerAPI(racerDataStatus.idData.id);
+        if (!(findWinner instanceof Error)) {
+            await deleteWinnerAPI(racerDataStatus.idData.id);
+        }
     };
 
     const racerItemDataControl = useRef({ racerDataStatus, startRacer, stopRacer });
