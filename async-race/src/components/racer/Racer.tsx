@@ -5,10 +5,6 @@ import TRacerDataStatus from '../../types/TRacerDataStatus';
 import { TRacersControl } from '../../types/TRacerDataControl';
 
 type Props = {
-    racersData: {
-        racers: TRacersData;
-        setRacers: React.Dispatch<React.SetStateAction<TRacersData>>;
-    };
     racersOnPageData: {
         racersOnPage: TRacersData;
         setRacersOnPage: React.Dispatch<React.SetStateAction<TRacersData>>;
@@ -19,14 +15,18 @@ type Props = {
         setSelectedRacer: React.Dispatch<React.SetStateAction<TRacerDataStatus | null>>;
     };
     racersControl: TRacersControl;
+    dataStatus: {
+        dataChanged: boolean;
+        setDataChanged: React.Dispatch<React.SetStateAction<boolean>>;
+    };
 };
 
 export default function Racer({
-    racersData,
     racersOnPageData,
     racersItemData,
     selectedRacerData,
     racersControl,
+    dataStatus,
 }: Props) {
     const [racerNameState, setRacerNameState] = useState(racersItemData.name);
     const [racerColourState, setRacerColourState] = useState(racersItemData.color);
@@ -65,7 +65,6 @@ export default function Racer({
                 </div>
 
                 <RacerControls
-                    racersData={racersData}
                     racersOnPageData={racersOnPageData}
                     selectedRacerData={selectedRacerData}
                     racerDataStatus={racerDataStatus}
@@ -73,6 +72,7 @@ export default function Racer({
                     racerEngineStopStatus={{ isEngineStopped, setIsEngineStopped }}
                     racerAnimationStatus={{ racerTimeAnimation, setRacerTimeAnimation }}
                     racersControl={racersControl}
+                    dataStatus={dataStatus}
                 />
             </div>
 

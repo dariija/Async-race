@@ -11,10 +11,6 @@ import getWinnerAPI from '../../../utils/getWinnerAPI';
 import deleteWinnerAPI from '../../../utils/deleteWinnerAPI';
 
 type Props = {
-    racersData: {
-        racers: TRacersData;
-        setRacers: React.Dispatch<React.SetStateAction<TRacersData>>;
-    };
     racersOnPageData: {
         racersOnPage: TRacersData;
         setRacersOnPage: React.Dispatch<React.SetStateAction<TRacersData>>;
@@ -37,17 +33,20 @@ type Props = {
         setRacerTimeAnimation: React.Dispatch<React.SetStateAction<number>>;
     };
     racersControl: TRacersControl;
+    dataStatus: {
+        dataChanged: boolean;
+        setDataChanged: React.Dispatch<React.SetStateAction<boolean>>;
+    };
 };
 
 export default function RacerControls({
-    racersData,
-    racersOnPageData,
     racerDataStatus,
     selectedRacerData,
     racerEngineStartStatus,
     racerEngineStopStatus,
     racerAnimationStatus,
     racersControl,
+    dataStatus,
 }: Props) {
     const startRacer = async () => {
         const start = await startEngineAPI(racerDataStatus.idData.id);
@@ -81,15 +80,13 @@ export default function RacerControls({
     };
 
     const deleteRacer = async () => {
-        const deletedRacer = await deleteRacerAPI(racerDataStatus.idData.id);
-        if (!(deletedRacer instanceof Error)) {
-            const newData = racersData.racers.filter((racer) => racer.id !== racerDataStatus.idData.id);
-            racersData.setRacers(newData);
-            racersOnPageData.setRacersOnPage(newData);
-        }
         const findWinner = await getWinnerAPI(racerDataStatus.idData.id);
         if (!(findWinner instanceof Error)) {
             await deleteWinnerAPI(racerDataStatus.idData.id);
+        }
+        const deletedRacer = await deleteRacerAPI(racerDataStatus.idData.id);
+        if (!(deletedRacer instanceof Error)) {
+            dataStatus.setDataChanged(true);
         }
     };
 

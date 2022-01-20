@@ -4,7 +4,6 @@ import TRacerResponse from '../../types/TRacerResponse';
 import TRacerWinner from '../../types/TRacerWinner';
 import createWinnerAPI from '../../utils/createWinnerAPI';
 import getWinnerAPI from '../../utils/getWinnerAPI';
-import getWinnersAPI from '../../utils/getWinnersAPI';
 import updateWinnerAPI from '../../utils/updateWinnerAPI';
 import Button from '../button/Button';
 
@@ -39,7 +38,9 @@ export default function StartRace({ racersControl }: Props) {
                 })().catch((e) => e);
             });
         });
-        const racerWinner = await Promise.any(racersPromises);
+        const racerWinner = await Promise.any(racersPromises)
+            .then((res) => res)
+            .catch((e) => e);
         if (!(racerWinner instanceof Error)) setWinner(racerWinner);
     };
 

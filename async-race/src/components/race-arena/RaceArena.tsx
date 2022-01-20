@@ -4,12 +4,9 @@ import Racer from '../racer/Racer';
 import { TRacersData } from '../../types/TRacersData';
 import TRacerDataStatus from '../../types/TRacerDataStatus';
 import { TRacersControl } from '../../types/TRacerDataControl';
+import getRacersAPI from '../../utils/getRacersAPI';
 
 type Props = {
-    racersData: {
-        racers: TRacersData;
-        setRacers: React.Dispatch<React.SetStateAction<TRacersData>>;
-    };
     racersOnPageData: {
         racersOnPage: TRacersData;
         setRacersOnPage: React.Dispatch<React.SetStateAction<TRacersData>>;
@@ -20,48 +17,56 @@ type Props = {
     };
     limitPerPage: number;
     racersControl: TRacersControl;
+    dataStatus: {
+        dataChanged: boolean;
+        setDataChanged: React.Dispatch<React.SetStateAction<boolean>>;
+    };
 };
 
 export default function RaceArena({
-    racersData,
     racersOnPageData,
     selectedRacerData,
     limitPerPage,
     racersControl,
+    dataStatus,
 }: Props) {
-    const garagePagesQuantity = Math.ceil(racersData.racers.length / limitPerPage);
+    const [pagesQuantity, setPagesQuantity] = useState(1);
     const [activePage, setActivePage] = useState(1);
 
+    const updateRacersOnPage = async () => {
+        const getRacers = await getRacersAPI(activePage, limitPerPage);
+        setPagesQuantity(Math.ceil(getRacers.allRacers / limitPerPage));
+        racersOnPageData.setRacersOnPage(getRacers.racersPerPage);
+    };
+
     useEffect(() => {
-        const racersFrom = (activePage - 1) * limitPerPage;
-        const racersPerPage: TRacersData = [];
-        for (let i = 0; i < limitPerPage; i += 1) {
-            if (racersData.racers[racersFrom + i]) racersPerPage.push(racersData.racers[racersFrom + i]);
-            else break;
-        }
-        racersOnPageData.setRacersOnPage(racersPerPage);
-    }, [activePage, racersData]);
+        updateRacersOnPage();
+    }, [activePage]);
+
+    useEffect(() => {
+        if (dataStatus.dataChanged) updateRacersOnPage();
+        dataStatus.setDataChanged(false);
+    }, [dataStatus, pagesQuantity]);
 
     return (
         <div className="race-arena">
             <div className="race-arena__page">
-                <div>{racersData.racers.length}</div>
                 <div>{racersOnPageData.racersOnPage.length}</div>
                 {racersOnPageData.racersOnPage.map((item) => (
                     <div className="race-arena__item" key={`arena_item_${item.id.toString()}`}>
                         <Racer
-                            racersData={racersData}
                             racersOnPageData={racersOnPageData}
                             racersItemData={item}
                             selectedRacerData={selectedRacerData}
-                            key={`racer_${item.id.toString()}`}
                             racersControl={racersControl}
+                            dataStatus={dataStatus}
+                            key={`racer_${item.id.toString()}`}
                         />
                     </div>
                 ))}
             </div>
 
-            <PageNavigation pagesQuantity={garagePagesQuantity} page={{ activePage, setActivePage }} path="garage" />
+            <PageNavigation pagesQuantity={pagesQuantity} page={{ activePage, setActivePage }} path="garage" />
         </div>
     );
 }
