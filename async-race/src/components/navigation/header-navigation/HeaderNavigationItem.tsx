@@ -18,7 +18,7 @@ export default function HeaderNavigationItem({ className, path, isPageActive, se
     return (
         <li className={`${className}__item`}>
             <a
-                href={`#${path}`}
+                href={`${path === 'garage' ? '' : `#${path}`}`}
                 className={`${className}__link ${isPageActive ? `${className}__link_active` : ''}`}
                 onClick={changeActivePage}
             >

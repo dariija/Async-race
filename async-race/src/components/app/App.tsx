@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import TAppState from '../../types/TAppState';
 import TRacerDataStatus from '../../types/TRacerDataStatus';
 import Header from '../header/Header';
@@ -28,16 +28,10 @@ export default function App() {
         editState: { editedRacerValueIsChanged, setEditedRacerValueIsChanged },
     };
 
-    useEffect(() => {
-        const url = window.location;
-        const redirectedUrl = `${url.protocol}//${url.host}/${url.pathname}/#garage`;
-        document.location.replace(redirectedUrl);
-    }, []);
-
     return (
         <>
             <Header pages={pages} pageStatus={{ activePage, setActivePage }} />
-            <Route path="#garage">
+            <Route path="">
                 <MainGarage appState={appStatus} />
             </Route>
 
