@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PageNavigation from '../navigation/page-navigation/PageNavigation';
 import Racer from '../racer/Racer';
 import { TRacersData } from '../../types/TRacersData';
-import TRacerDataStatus from '../../types/TRacerDataStatus';
-import { TRacerDataControl, TRacersControl } from '../../types/TRacerDataControl';
+import { TRacerDataControl } from '../../types/TRacerDataControl';
 import getRacersAPI from '../../utils/getRacersAPI';
 import TAppState from '../../types/TAppState';
 
@@ -67,7 +66,12 @@ export default function RaceArena({ racersOnPageData, limitPerPage, dataStatus, 
                 ))}
             </div>
 
-            <PageNavigation pagesQuantity={pagesQuantity} page={appState.page} path="garage" />
+            <div className="page-nav">
+                <p className="page-nav__text">
+                    Page {appState.page.activeContentPage}/{pagesQuantity}
+                </p>
+                <PageNavigation pagesQuantity={pagesQuantity} page={appState.page} path="garage" />
+            </div>
         </div>
     );
 }

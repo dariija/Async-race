@@ -93,7 +93,14 @@ input[type=color] {
 
 .page-nav {
     padding: 10px;
+}
 
+.page-nav__text {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.page-nav__nav {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -409,7 +416,7 @@ input[type=color] {
     padding-top: 50px;
 }
 
-.winners-table__wrapper {
+.winners-table-wrapper {
     max-width: 70%;
     margin: auto;
     padding: 20px 20px 0px;

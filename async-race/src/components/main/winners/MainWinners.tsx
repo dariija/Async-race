@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TRacer, TRacersData } from '../../../types/TRacersData';
+import { TRacer } from '../../../types/TRacersData';
 import TWinner from '../../../types/TWinner';
 import TWinnerTableData from '../../../types/TWinnerTableData';
 import getRacerAPI from '../../../utils/getRacerAPI';
@@ -48,7 +48,7 @@ export default function MainWinners() {
 
     return (
         <main className="winners">
-            <div className="winners-table__wrapper">
+            <div className="winners-table-wrapper">
                 <WinnersTable
                     winners={{ winnersFullData, setWinnersFullData }}
                     allWinners={{ allWinnersQuantity, setAllWinnersQuantity }}
@@ -56,11 +56,16 @@ export default function MainWinners() {
                     limitPerPage={limitPerPage}
                     activePage={activeContentPage}
                 />
-                <PageNavigation
-                    pagesQuantity={pagesQuantity}
-                    page={{ activeContentPage, setActiveContentPage }}
-                    path="winners"
-                />
+                <div className="page-nav">
+                    <p className="page-nav__text">
+                        Page {activeContentPage}/{pagesQuantity}
+                    </p>
+                    <PageNavigation
+                        pagesQuantity={pagesQuantity}
+                        page={{ activeContentPage, setActiveContentPage }}
+                        path="winners"
+                    />
+                </div>
             </div>
         </main>
     );

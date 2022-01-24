@@ -21,7 +21,7 @@ export default function PageNavigation({ pagesQuantity, page, path }: Props) {
     };
 
     return (
-        <nav className="page-nav">
+        <nav className="page-nav__nav">
             <Button className="button button_prev" handleClick={goToPrevPage} disabled={page.activeContentPage === 1}>
                 <>
                     <span className="arr-left arr-left_top-part" />
