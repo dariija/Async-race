@@ -20,7 +20,8 @@ type Props = {
 
 export default function StartRace({ racersControlData }: Props) {
     const [isRaceStart, setIsRaceStart] = useState(false);
-    const [isRaceStop, setIsRaceStop] = useState(true);
+    const [isRaceStop, setIsRaceStop] = useState(false);
+    const [getAnswer, setGetAnswer] = useState<TRacerWinner | Error>(new Error());
     const [winner, setWinner] = useState<TRacerWinner | null>(null);
 
     useEffect(() => {
@@ -47,11 +48,17 @@ export default function StartRace({ racersControlData }: Props) {
             });
         });
 
-        const racerWinner = await Promise.any(racersPromises)
+        const racerWinner: TRacerWinner | Error = await Promise.any(racersPromises)
             .then((res) => res)
             .catch((e) => e);
-        if (!(racerWinner instanceof Error)) setWinner(racerWinner);
+        setGetAnswer(racerWinner);
     };
+
+    useEffect(() => {
+        if (!(getAnswer instanceof Error) && !isRaceStop) {
+            setWinner(getAnswer);
+        }
+    }, [getAnswer]);
 
     const stopRace = async () => {
         setIsRaceStop(true);
