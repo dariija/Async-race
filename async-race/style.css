@@ -96,7 +96,7 @@ input[type=color] {
 }
 
 .page-nav__text {
-    margin-bottom: 10px;
+    margin-bottom: 7px;
     text-align: center;
 }
 
@@ -252,7 +252,8 @@ input[type=color] {
 .settings {
     display: flex;
     gap: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+    
 }
 
 .settings-container {
@@ -311,8 +312,8 @@ input[type=color] {
 
 /* ---------- Race-arena ---------- */
 .race-arena__header {
-    margin-bottom: 10px;
-    font-size: 24px;
+    margin-bottom: 5px;
+    font-size: 21px;
     text-align: center;
 }
 
@@ -333,14 +334,14 @@ input[type=color] {
 
 .racer__panel {
     width: 150px;
-    padding: 5px;
+    padding: 2px 5px 0px;
 
     background-color: #fdf8f2;
     border-radius: 10px;
 }
 
 .racer__info {
-    margin-bottom: 5px;
+    margin-bottom: 3px;
 }
 
 .racer__controls {

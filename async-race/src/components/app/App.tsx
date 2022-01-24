@@ -30,7 +30,7 @@ export default function App() {
 
     useEffect(() => {
         const url = window.location;
-        const redirectedUrl = `${url.protocol}//${url.host}/#garage`;
+        const redirectedUrl = `${url.protocol}//${url.host}/${url.pathname}/#garage`;
         document.location.replace(redirectedUrl);
     }, []);
 
