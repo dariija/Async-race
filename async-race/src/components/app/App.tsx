@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TAppState from '../../types/TAppState';
 import TRacerDataStatus from '../../types/TRacerDataStatus';
 import Header from '../header/Header';

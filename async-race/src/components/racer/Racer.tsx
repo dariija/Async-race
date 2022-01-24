@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import RacerControls from './racer-controls/RacerControls';
-import { TRacer, TRacersData } from '../../types/TRacersData';
-import TRacerDataStatus from '../../types/TRacerDataStatus';
-import { TRacerDataControl, TRacersControl } from '../../types/TRacerDataControl';
+import { TRacer } from '../../types/TRacersData';
+import { TRacerDataControl } from '../../types/TRacerDataControl';
 import RacerPicture from '../picture/RacerPicture';
 import TAppState from '../../types/TAppState';
 

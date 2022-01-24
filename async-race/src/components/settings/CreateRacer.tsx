@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from '../button/Button';
-import { TRacer, TRacersData } from '../../types/TRacersData';
+import { TRacer } from '../../types/TRacersData';
 import generateRandomName from '../../utils/generateRandomName';
 import generateRandomColour from '../../utils/generateRandomColour';
 import createRacerAPI from '../../utils/createRacerAPI';

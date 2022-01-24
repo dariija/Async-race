@@ -1,10 +1,9 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useReducer, useState } from 'react';
 import RaceArena from '../../race-arena/RaceArena';
 import CreateRacer from '../../settings/CreateRacer';
 import EditRacer from '../../settings/EditRacer';
 import StartRace from '../../settings/StartRace';
 import { TRacersData } from '../../../types/TRacersData';
-import TRacerDataStatus from '../../../types/TRacerDataStatus';
 import { TRacerDataControl, TRacersControl } from '../../../types/TRacerDataControl';
 import TAppState from '../../../types/TAppState';
 

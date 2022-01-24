@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Button from '../button/Button';
-import TRacerDataStatus from '../../types/TRacerDataStatus';
 import updateRacerAPI from '../../utils/updateRacerAPI';
 import TAppState from '../../types/TAppState';
 

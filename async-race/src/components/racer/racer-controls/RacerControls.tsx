@@ -5,7 +5,7 @@ import startEngineAPI from '../../../utils/startEngineAPI';
 import stopEngineAPI from '../../../utils/stopEngineAPI';
 import switchEngineToDriveModeAPI from '../../../utils/switchEngineToDriveModeAPI';
 import deleteRacerAPI from '../../../utils/deleteRacerAPI';
-import { TRacerDataControl, TRacersControl } from '../../../types/TRacerDataControl';
+import { TRacerDataControl } from '../../../types/TRacerDataControl';
 import getWinnerAPI from '../../../utils/getWinnerAPI';
 import deleteWinnerAPI from '../../../utils/deleteWinnerAPI';
 import TAppState from '../../../types/TAppState';
