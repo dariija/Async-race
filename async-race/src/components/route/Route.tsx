@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 export default function Route({ path, children }: { path: string; children: JSX.Element }) {
     const [currentPath, setCurrentPath] = useState(window.location.hash);
+    if (currentPath === '') setCurrentPath('#garage');
 
     useEffect(() => {
         const onLocationChange = () => {

@@ -28,10 +28,12 @@ export default function App() {
         editState: { editedRacerValueIsChanged, setEditedRacerValueIsChanged },
     };
 
+
+
     return (
         <>
             <Header pages={pages} pageStatus={{ activePage, setActivePage }} />
-            <Route path="">
+            <Route path="#garage">
                 <MainGarage appState={appStatus} />
             </Route>
 
