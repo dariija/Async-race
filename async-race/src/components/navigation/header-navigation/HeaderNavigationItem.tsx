@@ -11,6 +11,8 @@ type Props = {
 export default function HeaderNavigationItem({ className, path, isPageActive, setActivePage, text }: Props) {
     const changeActivePage = () => {
         setActivePage(path);
+        const navEvent = new PopStateEvent('popstate');
+        window.dispatchEvent(navEvent);
     };
 
     return (

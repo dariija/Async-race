@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TRacersControl } from '../../types/TRacerDataControl';
+import { TRacerDataControl } from '../../types/TRacerDataControl';
 import TRacerResponse from '../../types/TRacerResponse';
 import TRacerWinner from '../../types/TRacerWinner';
 import createWinnerAPI from '../../utils/createWinnerAPI';
@@ -8,10 +8,16 @@ import updateWinnerAPI from '../../utils/updateWinnerAPI';
 import Button from '../button/Button';
 
 type Props = {
-    racersControl: TRacersControl;
+    racersControlData: {
+        racersControl: TRacerDataControl[];
+        racersControlDispatch: React.Dispatch<{
+            type: string;
+            racer: TRacerDataControl;
+        }>;
+    };
 };
 
-export default function StartRace({ racersControl }: Props) {
+export default function StartRace({ racersControlData }: Props) {
     const [isRaceStart, setIsRaceStart] = useState(false);
     const [isRaceStop, setIsRaceStop] = useState(true);
     const [winner, setWinner] = useState<TRacerWinner | null>(null);
@@ -29,7 +35,8 @@ export default function StartRace({ racersControl }: Props) {
     const startRace = async () => {
         setIsRaceStart(true);
         setIsRaceStop(false);
-        const racersPromises: TRacerResponse[] = racersControl.map((racer) => {
+
+        const racersPromises: TRacerResponse[] = racersControlData.racersControl.map((racer) => {
             return new Promise((resolve) => {
                 (async () => {
                     const racerPromise = await racer.startRacer();
@@ -38,6 +45,7 @@ export default function StartRace({ racersControl }: Props) {
                 })().catch((e) => e);
             });
         });
+
         const racerWinner = await Promise.any(racersPromises)
             .then((res) => res)
             .catch((e) => e);
@@ -47,15 +55,23 @@ export default function StartRace({ racersControl }: Props) {
     const stopRace = async () => {
         setIsRaceStop(true);
         setIsRaceStart(false);
-        const racersPromises = racersControl.map((racer) => racer.stopRacer());
+        const racersPromises = racersControlData.racersControl.map((racer) => racer.stopRacer());
         await Promise.all(racersPromises);
         setWinner(null);
     };
 
     return (
-        <div className="race">
-            <Button className="start-race" text="Start race!" handleClick={startRace} disabled={isRaceStart} />
-            <Button className="stop-race" text="Stop race" handleClick={stopRace} disabled={isRaceStop} />
+        <div className="settings-container">
+            <p className="settings-container__header">Race</p>
+            <div className="settings-container__content">
+                <Button
+                    className="button button_start-race"
+                    text="Start race!"
+                    handleClick={startRace}
+                    disabled={isRaceStart}
+                />
+                <Button className="button button_stop-race" text="Reset" handleClick={stopRace} disabled={isRaceStop} />
+            </div>
         </div>
     );
 }

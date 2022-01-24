@@ -2,60 +2,74 @@ import React, { useEffect, useState } from 'react';
 import Button from '../button/Button';
 import TRacerDataStatus from '../../types/TRacerDataStatus';
 import updateRacerAPI from '../../utils/updateRacerAPI';
+import TAppState from '../../types/TAppState';
 
 type Props = {
-    selectedRacerData: {
-        selectedRacer: TRacerDataStatus | null;
-        setSelectedRacer: React.Dispatch<React.SetStateAction<TRacerDataStatus | null>>;
-    };
+    appState: TAppState;
 };
 
-export default function EditRacer({ selectedRacerData }: Props) {
-    const [editedRacerName, setEditedRacerName] = useState('');
+export default function EditRacer({ appState }: Props) {
     const editName = ({ target }: { target: HTMLInputElement }) => {
-        setEditedRacerName(target.value);
+        appState.editState.setEditedRacerValueIsChanged(true);
+        appState.editName.setEditedRacerName(target.value);
     };
 
-    const [editedRacerColour, setEditedRacerColour] = useState('#000000');
     const editColour = ({ target }: { target: HTMLInputElement }) => {
-        setEditedRacerColour(target.value);
+        appState.editState.setEditedRacerValueIsChanged(true);
+        appState.editColor.setEditedRacerColour(target.value);
     };
 
     useEffect(() => {
-        if (selectedRacerData.selectedRacer) {
-            setEditedRacerName(selectedRacerData.selectedRacer.nameData.name);
-        } else setEditedRacerName('');
-
-        if (selectedRacerData.selectedRacer) {
-            setEditedRacerColour(selectedRacerData.selectedRacer.colourData.colour);
-        } else setEditedRacerColour('#000000');
-    }, [selectedRacerData]);
+        if (appState.selected.selectedRacer && !appState.editState.editedRacerValueIsChanged) {
+            appState.editName.setEditedRacerName(appState.selected.selectedRacer.nameData.name);
+            appState.editColor.setEditedRacerColour(appState.selected.selectedRacer.colourData.colour);
+        } else if (appState.selected.selectedRacer === null) {
+            appState.editName.setEditedRacerName('');
+            appState.editColor.setEditedRacerColour('#000000');
+        }
+    }, [appState.selected]);
 
     const editRacer = async () => {
-        if (selectedRacerData.selectedRacer) {
+        if (appState.selected.selectedRacer) {
             const updated = await updateRacerAPI(
-                editedRacerName,
-                editedRacerColour,
-                selectedRacerData.selectedRacer.idData.id
+                appState.editName.editedRacerName,
+                appState.editColor.editedRacerColour,
+                appState.selected.selectedRacer.idData.id
             );
             if (!(updated instanceof Error)) {
-                selectedRacerData.selectedRacer.nameData.setName(editedRacerName);
-                selectedRacerData.selectedRacer.colourData.setColour(editedRacerColour);
-                selectedRacerData.setSelectedRacer(null);
+                appState.selected.selectedRacer.nameData.setName(appState.editName.editedRacerName);
+                appState.selected.selectedRacer.colourData.setColour(appState.editColor.editedRacerColour);
+                appState.selected.setSelectedRacer(null);
+                appState.editState.setEditedRacerValueIsChanged(false);
             }
         }
     };
 
     return (
-        <div className="edit">
-            <input type="text" onChange={editName} value={editedRacerName} />
-            <input type="color" onChange={editColour} value={editedRacerColour} />
-            <Button
-                className="button"
-                text="Edit"
-                handleClick={editRacer}
-                disabled={!selectedRacerData.selectedRacer}
-            />
+        <div className="settings-container">
+            <p className="settings-container__header">Edit</p>
+            <div className="settings-container__content">
+                <div className="button-group">
+                    <input
+                        type="text"
+                        onChange={editName}
+                        value={appState.editName.editedRacerName}
+                        disabled={!appState.selected.selectedRacer}
+                    />
+                    <input
+                        type="color"
+                        onChange={editColour}
+                        value={appState.editColor.editedRacerColour}
+                        disabled={!appState.selected.selectedRacer}
+                    />
+                </div>
+                <Button
+                    className="button button_edit"
+                    text="Edit"
+                    handleClick={editRacer}
+                    disabled={!appState.selected.selectedRacer}
+                />
+            </div>
         </div>
     );
 }

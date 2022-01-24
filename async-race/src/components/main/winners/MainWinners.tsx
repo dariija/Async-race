@@ -10,7 +10,7 @@ import WinnersTable from '../../winners-table/WinnersTable';
 export default function MainWinners() {
     const limitPerPage = 10;
     const [pagesQuantity, setPagesQuantity] = useState(1);
-    const [activePage, setActivePage] = useState(1);
+    const [activeContentPage, setActiveContentPage] = useState(1);
 
     const [winnersData, setWinnersData] = useState<TWinner[]>([]);
     const [winnersFullData, setWinnersFullData] = useState<TWinnerTableData[]>([]);
@@ -27,10 +27,10 @@ export default function MainWinners() {
 
     useEffect(() => {
         (async () => {
-            const getWinners = await getWinnersAPI(activePage, limitPerPage, sortBy, sortType);
+            const getWinners = await getWinnersAPI(activeContentPage, limitPerPage, sortBy, sortType);
             setWinnersData(getWinners.winnersPerPage);
         })();
-    }, [activePage, sortBy, sortType]);
+    }, [activeContentPage, sortBy, sortType]);
 
     useEffect(() => {
         (async () => {
@@ -51,9 +51,13 @@ export default function MainWinners() {
                     winners={{ winnersFullData, setWinnersFullData }}
                     sortData={{ sortBy, setSortBy, sortType, setSortType }}
                     limitPerPage={limitPerPage}
-                    activePage={activePage}
+                    activePage={activeContentPage}
                 />
-                <PageNavigation pagesQuantity={pagesQuantity} page={{ activePage, setActivePage }} path="winners" />
+                <PageNavigation
+                    pagesQuantity={pagesQuantity}
+                    page={{ activeContentPage, setActiveContentPage }}
+                    path="winners"
+                />
             </div>
         </main>
     );

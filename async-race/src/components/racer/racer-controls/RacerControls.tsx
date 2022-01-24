@@ -1,25 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 import Button from '../../button/Button';
-import { TRacersData } from '../../../types/TRacersData';
 import TRacerDataStatus from '../../../types/TRacerDataStatus';
 import startEngineAPI from '../../../utils/startEngineAPI';
 import stopEngineAPI from '../../../utils/stopEngineAPI';
 import switchEngineToDriveModeAPI from '../../../utils/switchEngineToDriveModeAPI';
 import deleteRacerAPI from '../../../utils/deleteRacerAPI';
-import { TRacersControl } from '../../../types/TRacerDataControl';
+import { TRacerDataControl, TRacersControl } from '../../../types/TRacerDataControl';
 import getWinnerAPI from '../../../utils/getWinnerAPI';
 import deleteWinnerAPI from '../../../utils/deleteWinnerAPI';
+import TAppState from '../../../types/TAppState';
 
 type Props = {
-    racersOnPageData: {
-        racersOnPage: TRacersData;
-        setRacersOnPage: React.Dispatch<React.SetStateAction<TRacersData>>;
-    };
     racerDataStatus: TRacerDataStatus;
-    selectedRacerData: {
-        selectedRacer: TRacerDataStatus | null;
-        setSelectedRacer: React.Dispatch<React.SetStateAction<TRacerDataStatus | null>>;
-    };
     racerEngineStartStatus: {
         isEngineStarted: boolean;
         setIsEngineStarted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -32,21 +24,28 @@ type Props = {
         racerTimeAnimation: number;
         setRacerTimeAnimation: React.Dispatch<React.SetStateAction<number>>;
     };
-    racersControl: TRacersControl;
     dataStatus: {
         dataChanged: boolean;
         setDataChanged: React.Dispatch<React.SetStateAction<boolean>>;
     };
+    racersControlData: {
+        racersControl: TRacerDataControl[];
+        racersControlDispatch: React.Dispatch<{
+            type: string;
+            racer: TRacerDataControl;
+        }>;
+    };
+    appState: TAppState;
 };
 
 export default function RacerControls({
     racerDataStatus,
-    selectedRacerData,
     racerEngineStartStatus,
     racerEngineStopStatus,
     racerAnimationStatus,
-    racersControl,
     dataStatus,
+    racersControlData,
+    appState,
 }: Props) {
     const startRacer = async () => {
         const start = await startEngineAPI(racerDataStatus.idData.id);
@@ -76,7 +75,8 @@ export default function RacerControls({
     };
 
     const selectRacer = () => {
-        selectedRacerData.setSelectedRacer(racerDataStatus);
+        appState.editState.setEditedRacerValueIsChanged(false);
+        appState.selected.setSelectedRacer(racerDataStatus);
     };
 
     const deleteRacer = async () => {
@@ -91,31 +91,43 @@ export default function RacerControls({
     };
 
     const racerItemDataControl = useRef({ racerDataStatus, startRacer, stopRacer });
+
     useEffect(() => {
-        racersControl.push(racerItemDataControl.current);
+        if (appState.selected.selectedRacer?.idData.id === racerDataStatus.idData.id) {
+            appState.selected.setSelectedRacer(racerDataStatus);
+        }
+
+        racersControlData.racersControlDispatch({ type: 'add', racer: racerItemDataControl.current });
+        return () => {
+            racersControlData.racersControlDispatch({ type: 'delete', racer: racerItemDataControl.current });
+        };
     }, []);
 
     return (
         <div className="racer__controls">
-            <Button
-                className="start"
-                text="Start"
-                handleClick={startRacer}
-                disabled={racerEngineStartStatus.isEngineStarted}
-            />
-            <Button
-                className="stop"
-                text="Stop"
-                handleClick={stopRacer}
-                disabled={!racerEngineStartStatus.isEngineStarted}
-            />
-            <Button
-                className="select"
-                text="Select"
-                handleClick={selectRacer}
-                disabled={selectedRacerData.selectedRacer?.idData.id === racerDataStatus.idData.id}
-            />
-            <Button className="delete" text="Delete" handleClick={deleteRacer} disabled={false} />
+            <div className="button-group">
+                <Button
+                    className="button button_start"
+                    text="Start"
+                    handleClick={startRacer}
+                    disabled={racerEngineStartStatus.isEngineStarted}
+                />
+                <Button
+                    className="button button_stop"
+                    text="Stop"
+                    handleClick={stopRacer}
+                    disabled={!racerEngineStartStatus.isEngineStarted}
+                />
+            </div>
+            <div className="button-group">
+                <Button
+                    className="button button_select"
+                    text="Select"
+                    handleClick={selectRacer}
+                    disabled={appState.selected.selectedRacer?.idData.id === racerDataStatus.idData.id}
+                />
+                <Button className="button button_delete" text="Delete" handleClick={deleteRacer} disabled={false} />
+            </div>
         </div>
     );
 }

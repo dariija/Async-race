@@ -16,10 +16,10 @@ export default function PageNavigationItem({ className, path, pageNum, isPageAct
     return (
         <li className={`${className}__item`}>
             <a
-                href={`#${path}#${pageNum}`}
+                href={`#${path}`}
                 className={`${className}__link ${isPageActive ? `${className}__link_active` : ''}`}
                 onClick={changeActivePage}
-                aria-label={`#${path}#${pageNum}`}
+                aria-label={`#${path}`}
             >
                 <span />
             </a>

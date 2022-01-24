@@ -4,28 +4,30 @@ import { TRacer, TRacersData } from '../../types/TRacersData';
 import generateRandomName from '../../utils/generateRandomName';
 import generateRandomColour from '../../utils/generateRandomColour';
 import createRacerAPI from '../../utils/createRacerAPI';
+import TAppState from '../../types/TAppState';
 
 type Props = {
     dataStatus: {
         dataChanged: boolean;
         setDataChanged: React.Dispatch<React.SetStateAction<boolean>>;
     };
+    appState: TAppState;
 };
 
-export default function CreateRacer({ dataStatus }: Props) {
-    const [newRacerName, setNewRacerName] = useState('');
+export default function CreateRacer({ dataStatus, appState }: Props) {
     const changeName = ({ target }: { target: HTMLInputElement }) => {
-        setNewRacerName(target.value);
+        appState.createName.setNewRacerName(target.value);
     };
 
-    const [newRacerColour, setNewRacerColour] = useState('#000000');
     const changeColour = ({ target }: { target: HTMLInputElement }) => {
-        setNewRacerColour(target.value);
+        appState.createColour.setNewRacerColour(target.value);
     };
 
     const createRacer = async () => {
-        await createRacerAPI(newRacerName, newRacerColour);
+        await createRacerAPI(appState.createName.newRacerName, appState.createColour.newRacerColour);
         dataStatus.setDataChanged(true);
+        appState.createName.setNewRacerName('');
+        appState.createColour.setNewRacerColour('#000000');
     };
 
     const generateRacers = async () => {
@@ -37,11 +39,21 @@ export default function CreateRacer({ dataStatus }: Props) {
     };
 
     return (
-        <div className="create">
-            <input type="text" onChange={changeName} value={newRacerName} />
-            <input type="color" onChange={changeColour} value={newRacerColour} />
-            <Button className="button" text="Create" handleClick={createRacer} disabled={false} />
-            <Button className="button" text="Generate" handleClick={generateRacers} disabled={false} />
+        <div className="settings-container">
+            <p className="settings-container__header">Create</p>
+            <div className="settings-container__content">
+                <div className="button-group">
+                    <input type="text" onChange={changeName} value={appState.createName.newRacerName} />
+                    <input type="color" onChange={changeColour} value={appState.createColour.newRacerColour} />
+                </div>
+                <Button className="button button_create" text="Create" handleClick={createRacer} disabled={false} />
+                <Button
+                    className="button button_generate"
+                    text="Generate"
+                    handleClick={generateRacers}
+                    disabled={false}
+                />
+            </div>
         </div>
     );
 }

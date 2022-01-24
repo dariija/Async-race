@@ -2,32 +2,27 @@ import React, { useEffect, useState } from 'react';
 import RacerControls from './racer-controls/RacerControls';
 import { TRacer, TRacersData } from '../../types/TRacersData';
 import TRacerDataStatus from '../../types/TRacerDataStatus';
-import { TRacersControl } from '../../types/TRacerDataControl';
+import { TRacerDataControl, TRacersControl } from '../../types/TRacerDataControl';
+import RacerPicture from '../picture/RacerPicture';
+import TAppState from '../../types/TAppState';
 
 type Props = {
-    racersOnPageData: {
-        racersOnPage: TRacersData;
-        setRacersOnPage: React.Dispatch<React.SetStateAction<TRacersData>>;
-    };
     racersItemData: TRacer;
-    selectedRacerData: {
-        selectedRacer: TRacerDataStatus | null;
-        setSelectedRacer: React.Dispatch<React.SetStateAction<TRacerDataStatus | null>>;
-    };
-    racersControl: TRacersControl;
     dataStatus: {
         dataChanged: boolean;
         setDataChanged: React.Dispatch<React.SetStateAction<boolean>>;
     };
+    racersControlData: {
+        racersControl: TRacerDataControl[];
+        racersControlDispatch: React.Dispatch<{
+            type: string;
+            racer: TRacerDataControl;
+        }>;
+    };
+    appState: TAppState;
 };
 
-export default function Racer({
-    racersOnPageData,
-    racersItemData,
-    selectedRacerData,
-    racersControl,
-    dataStatus,
-}: Props) {
+export default function Racer({ racersItemData, dataStatus, racersControlData, appState }: Props) {
     const [racerNameState, setRacerNameState] = useState(racersItemData.name);
     const [racerColourState, setRacerColourState] = useState(racersItemData.color);
     const [racerIdState, setRacerIdState] = useState(racersItemData.id);
@@ -52,6 +47,14 @@ export default function Racer({
         racer.color = racerColourState;
     }, [racerDataStatus]);
 
+    useEffect(() => {
+        return () => {
+            setRacerNameState('');
+            setRacerColourState('');
+            setRacerIdState(0);
+        };
+    }, []);
+
     const [isEngineStarted, setIsEngineStarted] = useState(false);
     const [isEngineStopped, setIsEngineStopped] = useState(false);
     const [racerTimeAnimation, setRacerTimeAnimation] = useState(0);
@@ -65,29 +68,26 @@ export default function Racer({
                 </div>
 
                 <RacerControls
-                    racersOnPageData={racersOnPageData}
-                    selectedRacerData={selectedRacerData}
                     racerDataStatus={racerDataStatus}
                     racerEngineStartStatus={{ isEngineStarted, setIsEngineStarted }}
                     racerEngineStopStatus={{ isEngineStopped, setIsEngineStopped }}
                     racerAnimationStatus={{ racerTimeAnimation, setRacerTimeAnimation }}
-                    racersControl={racersControl}
                     dataStatus={dataStatus}
+                    racersControlData={racersControlData}
+                    appState={appState}
                 />
             </div>
 
-            {/* <img className="racer__picture" src="./assets/w2.svg" alt="" /> */}
             <div
-                className={`${isEngineStarted ? 'startEngine' : ''} ${isEngineStopped ? 'stopEngine' : ''}`}
+                className={`racer_picture ${isEngineStarted ? 'startEngine' : ''} ${
+                    isEngineStopped ? 'stopEngine' : ''
+                }`}
                 style={{
-                    width: '30px',
-                    height: '30px',
-                    position: 'absolute',
-                    right: 'calc(100% - 50px)',
-                    backgroundColor: `${racerColourState}`,
                     animationDuration: `${racerTimeAnimation}s`,
                 }}
-            />
+            >
+                <RacerPicture colour={racerColourState} />
+            </div>
         </div>
     );
 }
