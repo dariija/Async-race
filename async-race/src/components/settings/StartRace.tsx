@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import TGetWinner from '../../types/TGetWinner';
 import { TRacerDataControl } from '../../types/TRacerDataControl';
 import TRacerResponse from '../../types/TRacerResponse';
 import TRacerWinner from '../../types/TRacerWinner';
@@ -27,9 +28,13 @@ export default function StartRace({ racersControlData }: Props) {
     useEffect(() => {
         (async () => {
             if (winner) {
-                const findWinner = await getWinnerAPI(winner.id);
+                const findWinner: TGetWinner | Error = await getWinnerAPI(winner.id);
                 if (findWinner instanceof Error) await createWinnerAPI(winner.id, 1, winner.time);
-                await updateWinnerAPI(findWinner.id, findWinner.wins + 1, winner.time);
+                else if (findWinner.time < winner.time) {
+                    await updateWinnerAPI(findWinner.id, findWinner.wins + 1, findWinner.time);
+                } else {
+                    await updateWinnerAPI(findWinner.id, findWinner.wins + 1, winner.time);
+                }
             }
         })();
     }, [winner]);
