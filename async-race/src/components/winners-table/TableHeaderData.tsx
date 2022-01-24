@@ -33,18 +33,23 @@ export default function TableHeaderData({ sortData }: Props) {
             <th>№</th>
             <th>Image</th>
             <th>Name</th>
-            <th>Wins</th>
             <th>
-                <label>
-                    <input type="checkbox" onChange={sortByWins} />
-                    <span />
+                Wins
+                <label className="checkbox-group" htmlFor="wins_sort">
+                    <input className="checkbox-group__checkbox" type="checkbox" id="wins_sort" onChange={sortByWins} />
+                    <span className="checkbox-group__arrow" />
                 </label>
             </th>
-            <th>Best time, s</th>
             <th>
-                <label>
-                    <input type="checkbox" onChange={sortByBestTime} />
-                    <span />
+                Best time, s
+                <label className="checkbox-group" htmlFor="time_sort">
+                    <input
+                        className="checkbox-group__checkbox"
+                        type="checkbox"
+                        id="time_sort"
+                        onChange={sortByBestTime}
+                    />
+                    <span className="checkbox-group__arrow" />
                 </label>
             </th>
         </tr>

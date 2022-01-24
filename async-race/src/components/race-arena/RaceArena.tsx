@@ -51,11 +51,12 @@ export default function RaceArena({ racersOnPageData, limitPerPage, dataStatus, 
         <div className="race-arena">
             <div className="race-arena__page">
                 <p className="race-arena__header">
-                    Garage <span className="race-arena__quantity">{allRacersQuantity}</span>
+                    Garage <span className="race-arena__quantity">({allRacersQuantity})</span>
                 </p>
-                {racersOnPageData.racersOnPage.map((item) => (
+                {racersOnPageData.racersOnPage.map((item, index) => (
                     <div className="race-arena__item" key={`arena_item_${item.id.toString()}`}>
                         <Racer
+                            racerNumber={appState.page.activeContentPage * limitPerPage + index + 1 - limitPerPage}
                             racersItemData={item}
                             dataStatus={dataStatus}
                             key={`racer_${item.id.toString()}`}

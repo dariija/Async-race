@@ -19,10 +19,11 @@ type Props = {
             racer: TRacerDataControl;
         }>;
     };
+    racerNumber: number;
     appState: TAppState;
 };
 
-export default function Racer({ racersItemData, dataStatus, racersControlData, appState }: Props) {
+export default function Racer({ racersItemData, racerNumber, dataStatus, racersControlData, appState }: Props) {
     const [racerNameState, setRacerNameState] = useState(racersItemData.name);
     const [racerColourState, setRacerColourState] = useState(racersItemData.color);
     const [racerIdState, setRacerIdState] = useState(racersItemData.id);
@@ -63,7 +64,7 @@ export default function Racer({ racersItemData, dataStatus, racersControlData, a
         <div className="racer">
             <div className="racer__panel">
                 <div className="racer__info">
-                    <span>{racerIdState}.</span>
+                    <span>{racerNumber}.</span>
                     <span>{racerNameState}</span>
                 </div>
 
@@ -86,7 +87,7 @@ export default function Racer({ racersItemData, dataStatus, racersControlData, a
                     animationDuration: `${racerTimeAnimation}s`,
                 }}
             >
-                <RacerPicture colour={racerColourState} />
+                <RacerPicture colour={racerColourState} className="racer__svg_garage" />
             </div>
         </div>
     );

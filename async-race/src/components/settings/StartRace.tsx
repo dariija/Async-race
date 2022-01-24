@@ -6,6 +6,7 @@ import createWinnerAPI from '../../utils/createWinnerAPI';
 import getWinnerAPI from '../../utils/getWinnerAPI';
 import updateWinnerAPI from '../../utils/updateWinnerAPI';
 import Button from '../button/Button';
+import ModalWindow from '../modal/ModalWindow';
 
 type Props = {
     racersControlData: {
@@ -61,17 +62,26 @@ export default function StartRace({ racersControlData }: Props) {
     };
 
     return (
-        <div className="settings-container">
-            <p className="settings-container__header">Race</p>
-            <div className="settings-container__content">
-                <Button
-                    className="button button_start-race"
-                    text="Start race!"
-                    handleClick={startRace}
-                    disabled={isRaceStart}
-                />
-                <Button className="button button_stop-race" text="Reset" handleClick={stopRace} disabled={isRaceStop} />
+        <>
+            <div className="settings-container">
+                <p className="settings-container__header">Race</p>
+                <div className="settings-container__content">
+                    <Button
+                        className="button button_start-race"
+                        text="Start race!"
+                        handleClick={startRace}
+                        disabled={isRaceStart}
+                    />
+                    <Button
+                        className="button button_stop-race"
+                        text="Reset"
+                        handleClick={stopRace}
+                        disabled={isRaceStop}
+                    />
+                </div>
             </div>
-        </div>
+
+            <ModalWindow className={`${winner ? 'showModal' : ''}`} winnerState={{ winner, setWinner }} />
+        </>
     );
 }

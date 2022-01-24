@@ -12,6 +12,7 @@ export default function MainWinners() {
     const [pagesQuantity, setPagesQuantity] = useState(1);
     const [activeContentPage, setActiveContentPage] = useState(1);
 
+    const [allWinnersQuantity, setAllWinnersQuantity] = useState(0);
     const [winnersData, setWinnersData] = useState<TWinner[]>([]);
     const [winnersFullData, setWinnersFullData] = useState<TWinnerTableData[]>([]);
 
@@ -28,6 +29,7 @@ export default function MainWinners() {
     useEffect(() => {
         (async () => {
             const getWinners = await getWinnersAPI(activeContentPage, limitPerPage, sortBy, sortType);
+            setAllWinnersQuantity(getWinners.allWinners);
             setWinnersData(getWinners.winnersPerPage);
         })();
     }, [activeContentPage, sortBy, sortType]);
@@ -49,6 +51,7 @@ export default function MainWinners() {
             <div className="winners-table__wrapper">
                 <WinnersTable
                     winners={{ winnersFullData, setWinnersFullData }}
+                    allWinners={{ allWinnersQuantity, setAllWinnersQuantity }}
                     sortData={{ sortBy, setSortBy, sortType, setSortType }}
                     limitPerPage={limitPerPage}
                     activePage={activeContentPage}

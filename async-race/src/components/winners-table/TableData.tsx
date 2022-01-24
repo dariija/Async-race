@@ -1,22 +1,24 @@
 import React from 'react';
+import RacerPicture from '../picture/RacerPicture';
 
 type Props = {
     number: number;
-    // picture: JSX.Element;
-    picture: string;
+    colour: string;
     name: string;
     winsQuantity: number;
     bestTime: number;
 };
 
-export default function TableData({ number, picture, name, winsQuantity, bestTime }: Props) {
+export default function TableData({ number, colour, name, winsQuantity, bestTime }: Props) {
     return (
         <tr>
             <td>{number}</td>
-            <td>{picture}</td>
+            <td>
+                <RacerPicture colour={colour} className="racer__svg_winners " />
+            </td>
             <td>{name}</td>
-            <td colSpan={2}>{winsQuantity}</td>
-            <td colSpan={2}>{bestTime}</td>
+            <td>{winsQuantity}</td>
+            <td>{bestTime}</td>
         </tr>
     );
 }

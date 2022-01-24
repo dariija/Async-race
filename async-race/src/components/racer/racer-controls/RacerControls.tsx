@@ -53,7 +53,7 @@ export default function RacerControls({
             racerEngineStopStatus.setIsEngineStopped(false);
             racerEngineStartStatus.setIsEngineStarted(true);
 
-            const time = start.distance / start.velocity / 1000;
+            const time = +(start.distance / start.velocity / 1000).toFixed(4);
             racerAnimationStatus.setRacerTimeAnimation(time);
             const drive = await switchEngineToDriveModeAPI(racerDataStatus.idData.id);
             if (drive instanceof Error) {

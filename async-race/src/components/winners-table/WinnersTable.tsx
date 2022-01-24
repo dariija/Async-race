@@ -8,6 +8,10 @@ type Props = {
         winnersFullData: TWinnerTableData[];
         setWinnersFullData: React.Dispatch<React.SetStateAction<TWinnerTableData[]>>;
     };
+    allWinners: {
+        allWinnersQuantity: number;
+        setAllWinnersQuantity: React.Dispatch<React.SetStateAction<number>>;
+    };
     sortData: {
         sortBy: string;
         setSortBy: React.Dispatch<React.SetStateAction<string>>;
@@ -18,10 +22,10 @@ type Props = {
     activePage: number;
 };
 
-export default function WinnersTable({ winners, sortData, limitPerPage, activePage }: Props) {
+export default function WinnersTable({ winners, allWinners, sortData, limitPerPage, activePage }: Props) {
     return (
         <table className="winners-table">
-            <caption>Winners</caption>
+            <caption className="winners-table__caption">Winners ({allWinners.allWinnersQuantity})</caption>
             <thead>
                 <TableHeaderData sortData={sortData} />
             </thead>
@@ -30,7 +34,7 @@ export default function WinnersTable({ winners, sortData, limitPerPage, activePa
                     return (
                         <TableData
                             number={activePage * limitPerPage + index + 1 - limitPerPage}
-                            picture={winner.color}
+                            colour={winner.color}
                             name={winner.name}
                             winsQuantity={winner.wins}
                             bestTime={winner.time}
