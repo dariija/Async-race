@@ -1,5 +1,5 @@
-const namePartOne = ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'];
-const namePartTwo = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+import brandsCars from './brands-cars';
+import modelsCars from './models-cars';
 
 function getRandomNum(minNum: number, maxNum: number) {
     const min = Math.ceil(minNum);
@@ -8,5 +8,5 @@ function getRandomNum(minNum: number, maxNum: number) {
 }
 
 export default function generateRandomName() {
-    return `${namePartOne[getRandomNum(0, namePartOne.length)]} ${namePartTwo[getRandomNum(0, namePartTwo.length)]} `;
+    return `${brandsCars[getRandomNum(0, brandsCars.length)]} ${modelsCars[getRandomNum(0, modelsCars.length)]} `;
 }
